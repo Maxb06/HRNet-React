@@ -1,0 +1,15 @@
+.selectField {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.selectField label {
+    margin-top: 10px;
+}
+
+.selectField select {
+    margin-top: 5px;
+    padding: 10px;
+    font-size: 16px;
+}
