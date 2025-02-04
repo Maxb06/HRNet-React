@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { addEmployee } from '../../store/employeesSlice';
+import { useEmployeeContext } from '../../hooks/useEmployeeContext';
 import { STATES, DEPARTMENTS } from '../../data/constants';
 import InputField from '../InputField/InputField';
 import SelectField from '../SelectField/SelectField';
@@ -9,13 +8,14 @@ import Modal from '../Modal/Modal';
 import styles from './Form.module.css';
 
 const Form = () => {
-  const dispatch = useDispatch();
+  // récup dispatch du contexte
+  const { dispatch } = useEmployeeContext();
 
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
-    dateOfBirth: null as Date | null,
-    startDate: null as Date | null,
+    dateOfBirth: null,
+    startDate: null, 
     street: '',
     city: '',
     state: '',
@@ -32,21 +32,22 @@ const Form = () => {
   const saveEmployee = (e: React.FormEvent) => {
     e.preventDefault();
 
-    dispatch(
-      addEmployee({
+    dispatch({
+      type: 'ADD_EMPLOYEE',
+      payload: {
+        id: Date.now().toString(),
         ...formData,
-        dateOfBirth: formData.dateOfBirth ? formData.dateOfBirth.toISOString().split('T')[0] : '',
-        startDate: formData.startDate ? formData.startDate.toISOString().split('T')[0] : '',
-      })
-    );
+        dateOfBirth: formData.dateOfBirth ? new Date(formData.dateOfBirth).toISOString() : null,
+        startDate: formData.startDate ? new Date(formData.startDate).toISOString() : null,
+      },
+    });
 
     setIsModalOpen(true);
-
     setFormData({
       firstName: '',
       lastName: '',
       dateOfBirth: null,
-      startDate: null,
+      startDate: null, 
       street: '',
       city: '',
       state: '',
@@ -60,14 +61,14 @@ const Form = () => {
       <InputField
         label="First Name"
         id="firstName"
-        type="text" value={formData.firstName}
+        type="text"
+        value={formData.firstName}
         onChange={(e) => handleChange('firstName', e.target.value)}
       />
 
       <InputField
         label="Last Name"
-        id="lastName"
-        type="text"
+        id="lastName" type="text"
         value={formData.lastName}
         onChange={(e) => handleChange('lastName', e.target.value)}
       />
@@ -77,7 +78,6 @@ const Form = () => {
         selected={formData.dateOfBirth}
         onChange={(date) => handleChange('dateOfBirth', date)}
       />
-
       <DatePickerField
         label="Start Date"
         selected={formData.startDate}
