@@ -7,23 +7,22 @@ interface DatePickerFieldProps {
   label: string;
   selected: Date | null;
   onChange: (date: Date | null) => void;
-  error?: string;
 }
 
-const DatePickerField: React.FC<DatePickerFieldProps> = ({ label, selected, onChange, error }) => {
+const DatePickerField: React.FC<DatePickerFieldProps> = ({ label, selected, onChange }) => {
   return (
     <div className={styles.field}>
       <label>{label}</label>
       <DatePicker
-        selected={selected}
+        selected={selected ?? null}
         onChange={onChange}
         dateFormat="yyyy-MM-dd"
         showMonthDropdown
         showYearDropdown
         dropdownMode="select"
         className={styles.customDatePicker}
+        isClearable
       />
-      {error && <span className={styles.error}>{error}</span>}
     </div>
   );
 };
