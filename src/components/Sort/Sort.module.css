@@ -1,0 +1,16 @@
+.sortable {
+    cursor: pointer;
+    user-select: none;
+  }
+  
+  .sortable div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .sortable span {
+    margin-left: 5px;
+  }
+
+  
