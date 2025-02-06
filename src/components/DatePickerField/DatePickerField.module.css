@@ -4,9 +4,26 @@
     gap: 5px;
 }
 
+.inputWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;  
+}
+
+label {
+    margin-top: 15px;
+}
+
 .customDatePicker {
     padding: 10px;
-    margin-bottom: 10px;
+    width: 100%;
     cursor: pointer;
-    
+    outline: none;
+}
+
+.calendarIcon {
+    position: absolute;
+    right: 50%; 
+    color: rgb(104, 152, 241);
 }
