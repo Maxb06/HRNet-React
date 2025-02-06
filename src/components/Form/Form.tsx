@@ -18,9 +18,9 @@ const Form = () => {
     startDate: null, 
     street: '',
     city: '',
-    state: '',
+    state: STATES[0].name,
     zipCode: '',
-    department: '',
+    department: DEPARTMENTS[0],
   });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -50,9 +50,9 @@ const Form = () => {
       startDate: null, 
       street: '',
       city: '',
-      state: '',
+      state: STATES[0].name,
       zipCode: '',
-      department: '',
+      department: DEPARTMENTS[0],
     });
   };
 
