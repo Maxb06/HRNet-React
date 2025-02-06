@@ -1,3 +1,8 @@
-.buttonContainer {
+.title {
     text-align: center;
+}
+
+a {
+    display: flex;
+    justify-content: center;
 }

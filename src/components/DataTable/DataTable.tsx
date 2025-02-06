@@ -5,27 +5,30 @@ import styles from './DataTable.module.css';
 
 const DataTable = () => {
   const { state, dispatch } = useEmployeeContext();
+  const employees = state.employees;
 
   // États
   const [search, setSearch] = useState('');
   const [entries, setEntries] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-  const [filteredData, setFilteredData] = useState(state.employees);
+  const [filteredData, setFilteredData] = useState(employees);
   const [sortConfig, setSortConfig] = useState<{ key: string | null; direction: 'ascending' | 'descending' }>({
     key: null,
     direction: 'ascending',
   });
 
+  // Mise à jour des données filtrées et triées
   useEffect(() => {
-    let result = state.employees.filter(
-      (employee) =>
-        employee.firstName.toLowerCase().includes(search.toLowerCase()) ||
-        employee.lastName.toLowerCase().includes(search.toLowerCase()) ||
-        employee.department.toLowerCase().includes(search.toLowerCase()) ||
-        employee.city.toLowerCase().includes(search.toLowerCase()) ||
-        employee.state.toLowerCase().includes(search.toLowerCase())
+    let result = employees.filter(
+      (emp) =>
+        emp.firstName.toLowerCase().includes(search.toLowerCase()) ||
+        emp.lastName.toLowerCase().includes(search.toLowerCase()) ||
+        emp.department.toLowerCase().includes(search.toLowerCase()) ||
+        emp.city.toLowerCase().includes(search.toLowerCase()) ||
+        emp.state.toLowerCase().includes(search.toLowerCase())
     );
 
+    // Tri si une colonne est sélectionnée
     if (sortConfig.key) {
       result = [...result].sort((a, b) => {
         const aValue = a[sortConfig.key as keyof typeof a] ?? '';
@@ -38,12 +41,14 @@ const DataTable = () => {
     }
 
     setFilteredData(result);
-  }, [search, state.employees, sortConfig]);
+  }, [search, employees, sortConfig]);
 
+  // Mise à jour pagination
   useEffect(() => {
     setCurrentPage(1);
   }, [entries, search]);
 
+  // Fonction de tri
   const requestSort = (key: string) => {
     setSortConfig((prev) => ({
       key,
@@ -63,63 +68,54 @@ const DataTable = () => {
 
   return (
     <div className={styles.container}>
-      {/* Barre de recherche et sélection d'entrées */}
+      {/* Barre de recherche & sélection d'entrées */}
       <div className={styles.header}>
-        <div>
-          <label>
-            Show
-            <select value={entries} onChange={(e) => setEntries(Number(e.target.value))}>
-              <option value={10}>10</option>
-              <option value={25}>25</option>
-              <option value={50}>50</option>
-              <option value={100}>100</option>
-            </select>{' '}
-            entries
-          </label>
-        </div>
-        <div>
-          <label>Search:</label>
-          <input type="text" value={search} onChange={(e) => setSearch(e.target.value)} />
-        </div>
+        <label>
+          Show
+          <select value={entries} onChange={(e) => setEntries(Number(e.target.value))}>
+            <option value={10}>10</option>
+            <option value={25}>25</option>
+            <option value={50}>50</option>
+          </select>{' '}
+          entries
+        </label>
+
+        <input type="text" placeholder="Search..." value={search} onChange={(e) => setSearch(e.target.value)} />
       </div>
 
-      {/* Tableau des employés */}
+      {/* Tableau */}
       <table className={styles.table}>
         <thead>
           <tr>
             <Sort column="firstName" label="First Name" sortConfig={sortConfig} requestSort={requestSort} />
             <Sort column="lastName" label="Last Name" sortConfig={sortConfig} requestSort={requestSort} />
+            <Sort column="dateOfBirth" label="Date of Birth" sortConfig={sortConfig} requestSort={requestSort} />
             <Sort column="startDate" label="Start Date" sortConfig={sortConfig} requestSort={requestSort} />
             <Sort column="department" label="Department" sortConfig={sortConfig} requestSort={requestSort} />
-            <Sort column="dateOfBirth" label="Date of Birth" sortConfig={sortConfig} requestSort={requestSort} />
-            <Sort column="street" label="Street" sortConfig={sortConfig} requestSort={requestSort} />
             <Sort column="city" label="City" sortConfig={sortConfig} requestSort={requestSort} />
             <Sort column="state" label="State" sortConfig={sortConfig} requestSort={requestSort} />
-            <Sort column="zipCode" label="Zip Code" sortConfig={sortConfig} requestSort={requestSort} />
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {currentItems.length > 0 ? (
-            currentItems.map((employee) => (
-              <tr key={employee.id}>
-                <td>{employee.firstName}</td>
-                <td>{employee.lastName}</td>
-                <td>{new Date(employee.startDate ?? '').toLocaleDateString()}</td>
-                <td>{employee.department}</td>
-                <td>{new Date(employee.dateOfBirth ?? '').toLocaleDateString()}</td>
-                <td>{employee.street}</td>
-                <td>{employee.city}</td>
-                <td>{employee.state}</td>
-                <td>{employee.zipCode}</td>
+            currentItems.map((emp) => (
+              <tr key={emp.id}>
+                <td>{emp.firstName}</td>
+                <td>{emp.lastName}</td>
+                <td>{new Date(emp.dateOfBirth ?? '').toLocaleDateString()}</td>
+                <td>{new Date(emp.startDate ?? '').toLocaleDateString()}</td>
+                <td>{emp.department}</td>    
+                <td>{emp.city}</td>
+                <td>{emp.state}</td>
                 <td>
-                  <button onClick={() => deleteEmployee(employee.id)}>🗑</button>
+                  <button onClick={() => deleteEmployee(emp.id)}>🗑</button>
                 </td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan={10}>No employees found.</td>
+              <td colSpan={8}>No employees found.</td>
             </tr>
           )}
         </tbody>
@@ -127,11 +123,17 @@ const DataTable = () => {
 
       {/* Pagination */}
       <div className={styles.footer}>
-        <button onClick={() => setCurrentPage((prev) => Math.min(prev - 1, 1))} disabled={currentPage === 1}>
+        <button
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}>
           Previous
         </button>
+
         <span>{currentPage}</span>
-        <button onClick={() => setCurrentPage((prev) => Math.max(prev + 1, totalPages))} disabled={currentPage === totalPages}>
+
+        <button
+          onClick={() => setCurrentPage((prev) => prev < totalPages ? prev + 1 : prev)}
+          disabled={currentPage >= totalPages}>
           Next
         </button>
       </div>
