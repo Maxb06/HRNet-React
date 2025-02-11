@@ -1,139 +1,124 @@
-import { useState, useEffect } from 'react';
+import { useMemo } from 'react';
+import {
+  useReactTable,
+  getCoreRowModel,
+  getSortedRowModel,
+  getPaginationRowModel,
+  flexRender,
+  ColumnDef,
+} from '@tanstack/react-table';
 import { useEmployeeContext } from '../../hooks/useEmployeeContext';
-import Sort from '../Sort/Sort';
 import styles from './DataTable.module.css';
 
+interface Employee {
+  id: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  startDate: string;
+  department: string;
+  city: string;
+  state: string;
+  zipCode: string;
+}
+
 const DataTable = () => {
-  const { state, dispatch } = useEmployeeContext();
-  const employees = state.employees;
+  const { state } = useEmployeeContext();
+  const data: Employee[] = useMemo(() => state.employees, [state.employees]);
 
-  // États
-  const [search, setSearch] = useState('');
-  const [entries, setEntries] = useState(10);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [filteredData, setFilteredData] = useState(employees);
-  const [sortConfig, setSortConfig] = useState<{ key: string | null; direction: 'ascending' | 'descending' }>({
-    key: null,
-    direction: 'ascending',
+  // Définition des colonnes
+  const columns: ColumnDef<Employee>[] = useMemo(
+    () => [
+      {
+        accessorKey: 'firstName',
+        header: 'First Name',
+      },
+      {
+        accessorKey: 'lastName',
+        header: 'Last Name',
+      },
+      {
+        accessorKey: 'dateOfBirth',
+        header: 'Date of Birth',
+        cell: ({ getValue }) => {
+          const dateValue = getValue<string>();
+          return dateValue ? new Date(dateValue).toLocaleDateString() : 'N/A';
+        }
+      },
+      {
+        accessorKey: 'startDate',
+        header: 'Start Date',
+        cell: ({ getValue }) => {
+          const dateValue = getValue<string>();
+          return dateValue ? new Date(dateValue).toLocaleDateString() : 'N/A';
+        }
+      },
+      {
+        accessorKey: 'department',
+        header: 'Department',
+      },
+      {
+        accessorKey: 'city',
+        header: 'City',
+      },
+      {
+        accessorKey: 'state',
+        header: 'State',
+      },
+      {
+        accessorKey: 'zipCode',
+        header: 'Zip Code',
+      },
+    ],
+    []
+  );
+
+  // Création du tableau avec React Table
+  const table = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
-
-  // Mise à jour des données filtrées et triées
-  useEffect(() => {
-    let result = employees.filter(
-      (emp) =>
-        emp.firstName.toLowerCase().includes(search.toLowerCase()) ||
-        emp.lastName.toLowerCase().includes(search.toLowerCase()) ||
-        emp.department.toLowerCase().includes(search.toLowerCase()) ||
-        emp.city.toLowerCase().includes(search.toLowerCase()) ||
-        emp.state.toLowerCase().includes(search.toLowerCase())
-    );
-
-    // Tri si une colonne est sélectionnée
-    if (sortConfig.key) {
-      result = [...result].sort((a, b) => {
-        const aValue = a[sortConfig.key as keyof typeof a] ?? '';
-        const bValue = b[sortConfig.key as keyof typeof b] ?? '';
-
-        return sortConfig.direction === 'ascending'
-          ? aValue.localeCompare(bValue)
-          : bValue.localeCompare(aValue);
-      });
-    }
-
-    setFilteredData(result);
-  }, [search, employees, sortConfig]);
-
-  // Mise à jour pagination
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [entries, search]);
-
-  // Fonction de tri
-  const requestSort = (key: string) => {
-    setSortConfig((prev) => ({
-      key,
-      direction: prev.key === key && prev.direction === 'ascending' ? 'descending' : 'ascending',
-    }));
-  };
-
-  const deleteEmployee = (id: string) => {
-    dispatch({ type: 'DELETE_EMPLOYEE', payload: id });
-  };
-
-  // Pagination
-  const indexOfLastItem = currentPage * entries;
-  const indexOfFirstItem = indexOfLastItem - entries;
-  const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(filteredData.length / entries);
 
   return (
     <div className={styles.container}>
-      {/* Barre de recherche & sélection d'entrées */}
-      <div className={styles.header}>
-        <label>
-          Show
-          <select value={entries} onChange={(e) => setEntries(Number(e.target.value))}>
-            <option value={10}>10</option>
-            <option value={25}>25</option>
-            <option value={50}>50</option>
-          </select>{' '}
-          entries
-        </label>
-
-        <input type="text" placeholder="Search..." value={search} onChange={(e) => setSearch(e.target.value)} />
-      </div>
-
-      {/* Tableau */}
       <table className={styles.table}>
         <thead>
-          <tr>
-            <Sort column="firstName" label="First Name" sortConfig={sortConfig} requestSort={requestSort} />
-            <Sort column="lastName" label="Last Name" sortConfig={sortConfig} requestSort={requestSort} />
-            <Sort column="dateOfBirth" label="Date of Birth" sortConfig={sortConfig} requestSort={requestSort} />
-            <Sort column="startDate" label="Start Date" sortConfig={sortConfig} requestSort={requestSort} />
-            <Sort column="department" label="Department" sortConfig={sortConfig} requestSort={requestSort} />
-            <Sort column="city" label="City" sortConfig={sortConfig} requestSort={requestSort} />
-            <Sort column="state" label="State" sortConfig={sortConfig} requestSort={requestSort} />
-            <th>Actions</th>
-          </tr>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <th key={header.id} onClick={header.column.getToggleSortingHandler()} className={styles.sortable}>
+                  {flexRender(header.column.columnDef.header, header.getContext())}
+                  {header.column.getIsSorted() && (
+                    <span>{header.column.getIsSorted() === 'asc' ? ' ▲' : ' ▼'}</span>
+                  )}
+                </th>
+              ))}
+            </tr>
+          ))}
         </thead>
         <tbody>
-          {currentItems.length > 0 ? (
-            currentItems.map((emp) => (
-              <tr key={emp.id}>
-                <td>{emp.firstName}</td>
-                <td>{emp.lastName}</td>
-                <td>{new Date(emp.dateOfBirth ?? '').toLocaleDateString()}</td>
-                <td>{new Date(emp.startDate ?? '').toLocaleDateString()}</td>
-                <td>{emp.department}</td>    
-                <td>{emp.city}</td>
-                <td>{emp.state}</td>
-                <td>
-                  <button onClick={() => deleteEmployee(emp.id)}>🗑</button>
-                </td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan={8}>No employees found.</td>
+          {table.getRowModel().rows.map((row) => (
+            <tr key={row.id}>
+              {row.getVisibleCells().map((cell) => (
+                <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+              ))}
             </tr>
-          )}
+          ))}
         </tbody>
       </table>
 
       {/* Pagination */}
       <div className={styles.footer}>
-        <button
-          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-          disabled={currentPage === 1}>
+        <button onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
           Previous
         </button>
-
-        <span>{currentPage}</span>
-
-        <button
-          onClick={() => setCurrentPage((prev) => prev < totalPages ? prev + 1 : prev)}
-          disabled={currentPage >= totalPages}>
+        <span>
+          Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+        </span>
+        <button onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
           Next
         </button>
       </div>
