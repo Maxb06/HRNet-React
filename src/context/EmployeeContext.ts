@@ -5,8 +5,8 @@ export interface Employee {
   id: string;
   firstName: string;
   lastName: string;
-  dateOfBirth: string | null;
-  startDate: string | null;
+  dateOfBirth: string;
+  startDate: string;
   street: string;
   city: string;
   state: string;
@@ -20,7 +20,6 @@ export interface EmployeeState {
 
 export type EmployeeAction =
   | { type: 'ADD_EMPLOYEE'; payload: Employee }
-  | { type: 'DELETE_EMPLOYEE'; payload: string };
 
 // Création du contexte
 export const EmployeeContext = createContext<{

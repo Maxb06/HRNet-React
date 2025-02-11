@@ -14,8 +14,8 @@ const Form = () => {
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
-    dateOfBirth: null,
-    startDate: null, 
+    dateOfBirth: '',
+    startDate: '',
     street: '',
     city: '',
     state: STATES[0].name,
@@ -37,8 +37,8 @@ const Form = () => {
       payload: {
         id: Date.now().toString(),
         ...formData,
-        dateOfBirth: formData.dateOfBirth ? new Date(formData.dateOfBirth).toISOString() : null,
-        startDate: formData.startDate ? new Date(formData.startDate).toISOString() : null,
+        dateOfBirth: formData.dateOfBirth ? new Date(formData.dateOfBirth).toISOString() : '',
+        startDate: formData.startDate ? new Date(formData.startDate).toISOString() : '',
       },
     });
 
@@ -46,8 +46,8 @@ const Form = () => {
     setFormData({
       firstName: '',
       lastName: '',
-      dateOfBirth: null,
-      startDate: null, 
+      dateOfBirth: '',
+      startDate: '',
       street: '',
       city: '',
       state: STATES[0].name,
@@ -75,14 +75,16 @@ const Form = () => {
 
       <DatePickerField
         label="Date of Birth"
-        selected={formData.dateOfBirth}
-        onChange={(date) => handleChange('dateOfBirth', date)}
+        selected={formData.dateOfBirth ? new Date(formData.dateOfBirth) : null}
+        onChange={(date) => handleChange('dateOfBirth', date ? date.toISOString() : '')}
       />
+
       <DatePickerField
         label="Start Date"
-        selected={formData.startDate}
-        onChange={(date) => handleChange('startDate', date)}
+        selected={formData.startDate ? new Date(formData.startDate) : null}
+        onChange={(date) => handleChange('startDate', date ? date.toISOString() : '')}
       />
+
 
       <InputField
         label="Street"
@@ -124,7 +126,7 @@ const Form = () => {
         onChange={(e) => handleChange('department', e.target.value)}
       />
 
-      <button type="submit">Save</button>
+      <button type="submit" className={styles.button}>Save</button>
 
       {isModalOpen && (
         <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>

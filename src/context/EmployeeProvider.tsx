@@ -9,12 +9,11 @@ const employeeReducer = (state: EmployeeState, action: EmployeeAction): Employee
   switch (action.type) {
     case 'ADD_EMPLOYEE':
       return { employees: [...state.employees, action.payload] };
-    case 'DELETE_EMPLOYEE':
-      return { employees: state.employees.filter(emp => emp.id !== action.payload) };
     default:
       return state;
   }
 };
+
 
 // Provider avec gestion de l’état
 export const EmployeeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
