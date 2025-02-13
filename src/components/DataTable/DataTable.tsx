@@ -73,7 +73,7 @@ const DataTable = () => {
     []
   );
 
-  // Création du tableau avec React Table
+  // Création du tableau React Table
   const table = useReactTable({
     data,
     columns,
