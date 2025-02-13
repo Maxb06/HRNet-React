@@ -85,38 +85,40 @@ const Form = () => {
         onChange={(date) => handleChange('startDate', date ? date.toISOString() : '')}
       />
 
+      <fieldset className={styles.addressFieldset}>
+        <legend className={styles.legend}>Address</legend>
+        <InputField
+          label="Street"
+          id="street"
+          type="text"
+          value={formData.street}
+          onChange={(e) => handleChange('street', e.target.value)}
+        />
 
-      <InputField
-        label="Street"
-        id="street"
-        type="text"
-        value={formData.street}
-        onChange={(e) => handleChange('street', e.target.value)}
-      />
+        <InputField
+          label="City"
+          id="city"
+          type="text"
+          value={formData.city}
+          onChange={(e) => handleChange('city', e.target.value)}
+        />
 
-      <InputField
-        label="City"
-        id="city"
-        type="text"
-        value={formData.city}
-        onChange={(e) => handleChange('city', e.target.value)}
-      />
+        <SelectField
+          label="State"
+          id="state"
+          options={STATES.map(s => s.name)}
+          value={formData.state}
+          onChange={(e) => handleChange('state', e.target.value)}
+        />
 
-      <SelectField
-        label="State"
-        id="state"
-        options={STATES.map(s => s.name)}
-        value={formData.state}
-        onChange={(e) => handleChange('state', e.target.value)}
-      />
-
-      <InputField
-        label="Zip Code"
-        id="zipCode"
-        type="number"
-        value={formData.zipCode}
-        onChange={(e) => handleChange('zipCode', e.target.value)}
-      />
+        <InputField
+          label="Zip Code"
+          id="zipCode"
+          type="number"
+          value={formData.zipCode}
+          onChange={(e) => handleChange('zipCode', e.target.value)}
+        />
+      </fieldset>
 
       <SelectField
         label="Department"

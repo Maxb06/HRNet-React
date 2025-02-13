@@ -2,17 +2,33 @@
     display: flex;
     flex-direction: column;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    max-width: 412px;
+    max-width: 450px;
     margin: 0 auto;
     padding: 20px;
     border-radius: 10px;
 }
 
-.form label {
-    font-size: 16px;
+.addressFieldset {
+    margin-top: 15px;
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 2px solid #c7c5c5;
+    border-radius: 8px;
 }
 
-button {
+.legend {
+    font-weight: 500;
+    padding: 0 10px;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.form label {
+    font-size: 16px;
+    margin-top: 15px;
+}
+
+.button {
     border-radius: 5px;
     font-size: 16px;
     transition: all 0.3s;
@@ -21,10 +37,10 @@ button {
     padding: 5px 20px;
     cursor: pointer;
     border: 1px solid rgb(124, 124, 124);
-
 }
 
 button:hover {
     scale: 1.10;
     background-color: rgba(0, 0, 0, 0.1);
+    color: black;
 }
