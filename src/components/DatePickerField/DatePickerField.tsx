@@ -11,11 +11,14 @@ interface DatePickerFieldProps {
 }
 
 const DatePickerField: React.FC<DatePickerFieldProps> = ({ label, selected, onChange }) => {
+  const id = `datepicker-${label.replace(/\s+/g, '-').toLowerCase()}`;
+
   return (
     <div className={styles.field}>
-      <label>{label}</label>
+      <label htmlFor={id}>{label}</label>
       <div className={styles.inputWrapper}>
         <DatePicker
+          id={id}
           selected={selected ?? null}
           onChange={onChange}
           dateFormat="yyyy-MM-dd"
@@ -25,7 +28,6 @@ const DatePickerField: React.FC<DatePickerFieldProps> = ({ label, selected, onCh
           className={styles.customDatePicker}
           isClearable
         />
-      
         <FaCalendarAlt className={styles.calendarIcon} />
       </div>
     </div>
