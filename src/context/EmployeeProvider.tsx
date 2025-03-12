@@ -1,10 +1,8 @@
 import React, { useReducer } from 'react';
 import { EmployeeContext, EmployeeState, EmployeeAction } from './EmployeeContext';
 
-// Init de l'état
 const initialState: EmployeeState = { employees: [] };
 
-// Reducer
 const employeeReducer = (state: EmployeeState, action: EmployeeAction): EmployeeState => {
   switch (action.type) {
     case 'ADD_EMPLOYEE':
@@ -14,8 +12,6 @@ const employeeReducer = (state: EmployeeState, action: EmployeeAction): Employee
   }
 };
 
-
-// Provider avec gestion de l’état
 export const EmployeeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [state, dispatch] = useReducer(employeeReducer, initialState);
 

@@ -1,6 +1,5 @@
 import { createContext } from 'react';
 
-// Définition unique des types
 export interface Employee {
   id: string;
   firstName: string;
@@ -21,7 +20,6 @@ export interface EmployeeState {
 export type EmployeeAction =
   | { type: 'ADD_EMPLOYEE'; payload: Employee }
 
-// Création du contexte
 export const EmployeeContext = createContext<{
   state: EmployeeState;
   dispatch: React.Dispatch<EmployeeAction>;
