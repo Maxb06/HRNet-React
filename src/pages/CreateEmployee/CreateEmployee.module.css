@@ -1,7 +1,54 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #f4f4f4;
+  padding: 10px 40px;
+}
+
+/* Hero */
 .hero {
-  text-align: center; 
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  margin-top: 0;
+  color: rgb(128, 168, 63);
+}
+
+.button {
+  display: inline-block;
+  padding: 0.8rem 1.5rem;
+  background-color: rgb(128, 168, 63);
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background 0.3s ease-in-out;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.button:hover {
+  background-color: rgb(58, 112, 31);
+}
+
+/* Section formulaire */
+.formSection {
+  width: 100%;
+  max-width: 960px;
 }
 
 .formTitle {
   text-align: center;
+}
+
+.formCard {
+  background: white;
+  padding: 0.5rem 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
