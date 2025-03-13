@@ -6,3 +6,32 @@
 body {
   margin: 0 auto;
 }
+
+.easyv2-footer {
+  align-items: center;
+  margin-top: 10px;
+}
+
+.easyv2-page-btn {
+  padding: 6px 10px;
+  margin: 0 2px;
+  border: none;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.easyv2-page-btn:hover:not(.easyv2-page-btn-active) {
+  background-color: #333;
+  color: #fff;
+}
+
+.easyv2-page-btn-active {
+  background-color: #dcdcdc;
+  font-weight: bold;
+  border: 1px solid #888;
+}
+
+.easyv2-pagination button:disabled {
+    cursor: not-allowed;
+}
