@@ -6,7 +6,6 @@
   padding: 10px 40px;
 }
 
-/* Hero */
 .hero {
   text-align: center;
   margin-bottom: 30px;
@@ -14,7 +13,6 @@
 
 .title {
   font-size: 3rem;
-  font-weight: bold;
   margin-bottom: 20px;
   margin-top: 0;
   color: rgb(58, 112, 31);
@@ -36,7 +34,6 @@
   background-color: rgb(38, 73, 20);
 }
 
-/* Section formulaire */
 .formSection {
   width: 100%;
   max-width: 960px;
