@@ -1,5 +1,7 @@
 .title {
     text-align: center;
+    color: rgb(58, 112, 31);
+    padding: 10px;
 }
 
 a {
@@ -11,4 +13,5 @@ a {
     margin-bottom: 10px;
     display: flex;
     justify-content: center;
+    padding: 10px;
 }
