@@ -55,22 +55,22 @@ Live Demo: https://hrnet-react-ecru.vercel.app/
 
 ## Installation
 
-# 1. Clone the repository
+### 1. Clone the repository
 ```bash
 git clone https://github.com/Maxb06/HRNet-React
 ```
 
-# 2. Navigate to the project folder
+### 2. Navigate to the project folder
 ```bash
 cd HRNet-React
 ```
 
-# 3. Install dependencies
+### 3. Install dependencies
 ```bash
 npm install
 ```
 
-# 4. Run the dev server
+### 4. Run the dev server
 ```bash
 npm run dev
 ```
