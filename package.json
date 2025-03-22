@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@types/react-datepicker": "^6.2.0",
-    "easyv2-table": "^1.0.17",
+    "easyv2-table": "^1.0.18",
     "react": "^18.3.1",
     "react-datepicker": "^7.6.0",
     "react-dom": "^18.3.1",
