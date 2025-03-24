@@ -40,3 +40,7 @@ body {
 .easyv2-sort-indicator {
   float: inline-end;
 }
+
+.react-datepicker__close-icon {
+  background-color: transparent !important;
+}
